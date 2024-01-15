@@ -9,6 +9,7 @@ export 'CounterModel.dart' ;
 import 'UserModel.dart';
 export 'UserModel.dart';
 
+import "work_model.dart";
 export "work_model.dart";
 
 
@@ -21,6 +22,7 @@ class ModelProviders {
   List<SingleChildWidget> providers = [
         ChangeNotifierProvider(create: (context) => Counter()),
         ChangeNotifierProvider(create: (context) => UserModel()),
+        ChangeNotifierProvider(create: (context) => WorkModel()),
   ];
   return providers;
 
