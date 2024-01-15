@@ -27,7 +27,7 @@ class IndexPage extends StatelessWidget {
           ),                    
           ListTile(
             leading: const Icon(Icons.settings_outlined),
-            title: const Text('设置'),
+            title: const Text('Setting'),
             onTap: () {
               GoRouter.of(context).push(AppRoutes.settingPath);
             },
@@ -38,7 +38,7 @@ class IndexPage extends StatelessWidget {
             onTap: () {
               GoRouter.of(context).push(
                 // 实际路径：/search?query=flutter
-                '${AppRoutes.searchPath}?query=flutter',
+                '${AppRoutes.secondPath}?query=flutter',
               );
             },
           ),
@@ -47,7 +47,7 @@ class IndexPage extends StatelessWidget {
             title: const Text('second_named'),
             onTap: () {
               GoRouter.of(context).pushNamed(
-                AppRoutes.searchNamed,
+                AppRoutes.secondNamed,
                 // queryParams 传递问号隔开的参数
                 queryParameters: {'query': 'abcd'},
               );
@@ -60,7 +60,7 @@ class IndexPage extends StatelessWidget {
               // 路径传递参数
               GoRouter.of(context).push(
                 // 实际路径： /movie_detail/654321
-                '${AppRoutes.movieDetailPath}/654321',
+                '${AppRoutes.firstPath}/654321',
               );
             },
           ),
@@ -70,7 +70,7 @@ class IndexPage extends StatelessWidget {
             onTap: () {
               // 命令路由传递参数
               GoRouter.of(context).pushNamed(
-                AppRoutes.movieDetailNamed,
+                AppRoutes.firstNamed,
                 // params 传递 `/` 隔开的参数
                 pathParameters : {'id': '123456'},
               );

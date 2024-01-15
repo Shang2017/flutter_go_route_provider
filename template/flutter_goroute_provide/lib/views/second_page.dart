@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({Key? key, required this.query}) : super(key: key);
+class SecondPage extends StatelessWidget {
+  const SecondPage({Key? key, required this.query}) : super(key: key);
   final String query;
 
   @override

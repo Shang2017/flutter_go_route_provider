@@ -22,24 +22,24 @@ class AppRoutes {
   // 用于路径路由(声明式路由)的常量, 路径不包含参数
   static const String homePath = '/'; // 根路由
   static const String settingPath = '/settings';
-  static const String movieDetailPath = '/first';
-  static const String searchPath = '/second';
+  static const String firstPath = '/first';
+  static const String secondPath = '/second';
   static const String thirdPath = '/third';
   static const String fourPath = '/four';
 
   // 用于 命名路由的常量
   static const String homeNamed = 'home_page';
   static const String settingsNamed = 'setting_page';
-  static const String movieDetailNamed = 'first_page';
-  static const String searchNamed = 'second_page';
+  static const String firstNamed = 'first_page';
+  static const String secondNamed = 'second_page';
   static const String thirdNamed = 'third_page';
   static const String fourNamed = 'four_page';
 
    static List<RouteIndex> index = [
     RouteIndex(homePath,homeNamed,'home'),
     RouteIndex(settingPath,settingsNamed,'setting'),
-    RouteIndex(movieDetailPath,movieDetailNamed,'setting'),
-    RouteIndex(searchPath,searchNamed,'search'),
+    RouteIndex(firstPath,firstNamed,'setting'),
+    RouteIndex(secondPath,secondNamed,'search'),
     
   ];
 
@@ -71,8 +71,8 @@ class AppRoutes {
       ),
       GoRoute(
         // 传递参数方式1, 参数格式类似URL：/search?query=flutter
-        name: searchNamed,
-        path: searchPath, // 问号格式的参数，在路径中不需要包含参数信息
+        name: secondNamed,
+        path: secondPath, // 问号格式的参数，在路径中不需要包含参数信息
 
         // GoRouter.of(context).pushNamed(AppRoutes.searchNamed, queryParams: {'query': 'abcd'});
         // GoRouter.of(context).push('${AppRoutes.searchPath}?query=flutter');
@@ -80,13 +80,13 @@ class AppRoutes {
         builder: (context, state) {
           // state.queryParams 接收用问号隔开的参数
           final query = state.uri.queryParameters['query'];
-          return SearchPage(query: query!);
+          return SecondPage(query: query!);
         },
       ),
       GoRoute(
         // 传递参数方式2, 参数格式：/movie_detail/123
-        name: movieDetailNamed,
-        path: '$movieDetailPath/:id', // 位置格式的参数，参数要包含在路径中
+        name: firstNamed,
+        path: '$firstPath/:id', // 位置格式的参数，参数要包含在路径中
 
         // GoRouter.of(context).pushNamed(AppRoutes.searchNamed, params: {'query': 'abcd'});
         // GoRouter.of(context).push('${AppRoutes.movieDetailPath}/654321');
@@ -94,7 +94,7 @@ class AppRoutes {
         builder: (context, state) {
           // state.params 接收 `/` 隔开的参数(按位置)
           final id = state.pathParameters ['id']!;
-          return MovieDetailPage(id: id);
+          return FirsDetailPage(id: id);
         },
       ),
     ],
