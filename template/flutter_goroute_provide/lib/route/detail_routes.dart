@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../views/index_page.dart';
@@ -10,11 +11,17 @@ import '../views/three_page.dart';
 import '../views/four_page.dart';
 
 
+
+typedef TapFunc = void  Function(BuildContext c);
+
 class RouteIndex{
-  RouteIndex(this.path, this.named,this.builder);
+  RouteIndex(this.path, this.named,this.builder,this.leading,this.title,this.onTap);
   String path;
   String named;  
   final GoRouterWidgetBuilder? builder;
+  Widget  leading;
+  Widget  title;
+  final TapFunc onTap;
 }
 
 class DetailRoutes {
@@ -35,27 +42,64 @@ class DetailRoutes {
   static const String fourNamed = 'four_page';
 
    static List<RouteIndex> index = [
-    RouteIndex(homePath,homeNamed,(context, state) => const IndexPage()),
-    RouteIndex(settingPath,settingsNamed,(context, state) => const SettingPage()),
+    RouteIndex(homePath,homeNamed,
+              (context, state) => const IndexPage(),
+              Icon(Icons.settings_outlined),Text('Setting'), 
+              (context) {
+                 GoRouter.of(context).push(DetailRoutes.settingPath);
+              },),
+    RouteIndex(settingPath,settingsNamed,
+              (context, state) => const SettingPage(),
+              Icon(Icons.settings_outlined),Text('Setting'), 
+              (context) {
+                GoRouter.of(context).push(DetailRoutes.settingPath);
+              },),
     RouteIndex('$firstPath/:id',firstNamed, 
         // GoRouter.of(context).pushNamed(AppRoutes.searchNamed, params: {'query': 'abcd'});
         // GoRouter.of(context).push('${AppRoutes.movieDetailPath}/654321');
         // GoRouter.of(context).go('/movie_detail/654321');
-        (context, state) {
-          final id = state.pathParameters ['id']!;
-          return FirsDetailPage(id: id);
-        }),
+              (context, state) {
+                 final id = state.pathParameters ['id']!;
+                return FirsDetailPage(id: id);
+              },
+              Icon(Icons.settings_outlined),Text('First'), 
+              (context)  {
+              // 命令路由传递参数
+              GoRouter.of(context).pushNamed(
+                DetailRoutes.firstNamed,
+                // params 传递 `/` 隔开的参数
+                pathParameters : {'id': '123456'},
+              );
+              },),
     RouteIndex(secondPath,secondNamed,
         // GoRouter.of(context).pushNamed(AppRoutes.searchNamed, queryParams: {'query': 'abcd'});
         // GoRouter.of(context).push('${AppRoutes.searchPath}?query=flutter');
         // GoRouter.of(context).go('/search?query=flutter');    
-      (context, state) {
+            (context, state) {
           // state.queryParams 接收用问号隔开的参数
-          final query = state.uri.queryParameters['query'];
-          return SecondPage(query: query!);
-        }
-      ),
-    RouteIndex(thirdPath,thirdNamed,(context, state) => ThirdPage()),
-    RouteIndex(fourPath,fourNamed,(context, state) => FourPage()),   
+               final query = state.uri.queryParameters['query'];
+               return SecondPage(query: query!);
+            },
+            Icon(Icons.settings_outlined),Text('Second'), 
+            (context) {
+              GoRouter.of(context).pushNamed(
+                DetailRoutes.secondNamed,
+                // queryParams 传递问号隔开的参数
+                queryParameters: {'query': 'abcd'},
+              );
+            },),
+      
+    RouteIndex(thirdPath,thirdNamed,
+            (context, state) => ThirdPage(),
+            Icon(Icons.settings_outlined),Text('Three'), 
+            (context) {
+              GoRouter.of(context).push(DetailRoutes.thirdPath);
+            },),
+    RouteIndex(fourPath,fourNamed,
+            (context, state) => FourPage(),
+            Icon(Icons.settings_outlined),Text('Four'), 
+            (context){
+              GoRouter.of(context).push(DetailRoutes.fourPath);
+            },),   
   ];
 }
