@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' show BuildContext;
 import 'package:provider/provider.dart'
-  show ChangeNotifierProvider, MultiProvider, Consumer, Provider;
+  show MultiProvider, Consumer, Provider;
 
 // ignore: unused_import
-import 'model/index.dart' show Counter, UserModel;
+import 'model/index.dart' show ModelProviders;
 export 'model/index.dart';
 export 'package:provider/provider.dart';
 
@@ -14,10 +14,7 @@ class Store {
   //  我们将会在main.dart中runAPP实例化init
   static init({context, child}) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => Counter()),
-        ChangeNotifierProvider(create: (context) => UserModel()),
-      ],
+      providers: ModelProviders(context).rn(),
       child: child,
     );
   }

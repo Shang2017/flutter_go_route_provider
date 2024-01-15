@@ -2,6 +2,9 @@
 
 Want to build a framwwork for MVC work
 
+Reference from Web. Thanks all.
+
+
 Use go_router as router
 Use Provider as store
 
