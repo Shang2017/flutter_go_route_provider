@@ -6,6 +6,9 @@ import '../views/first_page.dart';
 import '../views/second_page.dart';
 import '../views/settings_page.dart';
 
+import '../views/three_page.dart';
+import '../views/four_page.dart';
+
 
 class RouteIndex{
   RouteIndex(this.path, this.named,this.title);
@@ -21,12 +24,16 @@ class AppRoutes {
   static const String settingPath = '/settings';
   static const String movieDetailPath = '/first';
   static const String searchPath = '/second';
+  static const String thirdPath = '/third';
+  static const String fourPath = '/four';
 
   // 用于 命名路由的常量
   static const String homeNamed = 'home_page';
   static const String settingsNamed = 'setting_page';
   static const String movieDetailNamed = 'first_page';
   static const String searchNamed = 'second_page';
+  static const String thirdNamed = 'third_page';
+  static const String fourNamed = 'four_page';
 
    static List<RouteIndex> index = [
     RouteIndex(homePath,homeNamed,'home'),
@@ -41,8 +48,20 @@ class AppRoutes {
     routes: [
       GoRoute(
         // 不传递参数的路由项
-        name: index[0].named, // 命名路由
-        path: index[0].path, // 路径路由
+        name: thirdNamed, // 命名路由
+        path: thirdPath, // 路径路由
+        builder: (context, state) => ThirdPage(),
+      ),
+      GoRoute(
+        // 不传递参数的路由项
+        name: fourNamed, // 命名路由
+        path: fourPath, // 路径路由
+        builder: (context, state) => FourPage(),
+      ),
+      GoRoute(
+        // 不传递参数的路由项
+        name: homeNamed, // 命名路由
+        path: homePath, // 路径路由
         builder: (context, state) => const IndexPage(),
       ),
       GoRoute(

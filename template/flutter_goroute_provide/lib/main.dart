@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
 
+import 'store/index.dart' show Store;
+
+
 import 'route/app_routes.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    print('root build: $context');
+    return Store.init(
+      context: context,
+      child: MaterialApp(
+        title: 'Provider',
+        home: Builder(
+          builder: (context) {
+            Store.widgetCtx = context;
+            print('widgetCtx: $context');
+            return MyRoute();
+          },
+        ),
+      )
+    );
+  }
+}
+
+
+class MyRoute extends StatelessWidget {
+
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -23,3 +47,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

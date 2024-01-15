@@ -13,6 +13,20 @@ class IndexPage extends StatelessWidget {
         children: [
           ListTile(
             leading: const Icon(Icons.settings_outlined),
+            title: const Text('Three'),
+            onTap: () {
+              GoRouter.of(context).push(AppRoutes.thirdPath);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text('Four'),
+            onTap: () {
+              GoRouter.of(context).push(AppRoutes.fourPath);
+            },
+          ),                    
+          ListTile(
+            leading: const Icon(Icons.settings_outlined),
             title: const Text('设置'),
             onTap: () {
               GoRouter.of(context).push(AppRoutes.settingPath);
