@@ -13,6 +13,10 @@ import "work_model.dart";
 export "work_model.dart";
 
 
+import 'serial_port.dart';
+export 'serial_port.dart';
+
+
 
 
 class ModelProviders {
@@ -23,6 +27,7 @@ class ModelProviders {
         ChangeNotifierProvider(create: (context) => Counter()),
         ChangeNotifierProvider(create: (context) => UserModel()),
         ChangeNotifierProvider(create: (context) => WorkModel()),
+        ChangeNotifierProvider(create: (context) => SerialDevice()),
   ];
   return providers;
 

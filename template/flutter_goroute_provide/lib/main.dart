@@ -17,7 +17,19 @@ class MyApp extends StatelessWidget {
     return Store.init(
       context: context,
       child: MaterialApp(
-        title: 'Provider',
+      title: 'Provider',
+      theme: ThemeData( 
+          brightness:Brightness.light,
+          primarySwatch: Colors.red,
+          primaryColor:Colors.red,
+          
+          
+        ),
+      themeMode: ThemeMode.light,
+      darkTheme:ThemeData( 
+          brightness:Brightness.dark,
+          
+        ),   
         home: Builder(
           builder: (context) {
             Store.widgetCtx = context;
@@ -38,9 +50,17 @@ class MyRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter GoRoute Provider',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          theme: ThemeData( 
+          brightness:Brightness.light,
+          primarySwatch: Colors.red,
+          primaryColor:Colors.red,
+          
+        ),
+        themeMode: ThemeMode.light,
+        darkTheme:ThemeData( 
+          brightness:Brightness.dark,
+          
+        ),
    //   routeInformationParser: AppRoutes.router.routeInformationParser,
     // routerDelegate: AppRoutes.router.routerDelegate,
     routerConfig: AppRoutes.router,
