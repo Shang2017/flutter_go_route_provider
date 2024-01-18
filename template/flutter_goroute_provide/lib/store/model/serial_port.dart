@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'dart:collection';
+import '../../device/sport_protcol.dart';
 
 class SerialDevice with ChangeNotifier {
 
@@ -17,6 +18,9 @@ class SerialDevice with ChangeNotifier {
   int sendTimeout = DateTime.now().millisecondsSinceEpoch;
   StringBuffer buffer = StringBuffer();
   ListQueue qbuffer = ListQueue<String>();
+ 
+
+  SportProtocol sportProtocol = SportProtocol();
 
 
   String get data => qbuffer.join('\n').toString();
@@ -37,7 +41,7 @@ class SerialDevice with ChangeNotifier {
      port = SerialPort(portName);   
      if(port == null) print('open port fail!');    
     
-     port?.config.baudRate = 115200;
+     port?.config.baudRate = 57600;
      port?.config.bits = 8;
      port?.config.parity = 0;
      port?.config.stopBits = 1;
@@ -53,6 +57,7 @@ class SerialDevice with ChangeNotifier {
   // 读数据
   final reader = SerialPortReader(port!, timeout: 10);
   List<String> list = [];
+ 
   if (!port!.openReadWrite()) {
     print(SerialPort.lastError);
     return;
@@ -65,8 +70,9 @@ class SerialDevice with ChangeNotifier {
       if (lastTime > readTime) {
         for (var d in list) {
           buffer.write(d.toString());
-          if(qbuffer.length > 10) qbuffer.removeFirst();
+          if(qbuffer.length > 100) qbuffer.removeFirst();
           qbuffer.add(d.toString());
+       //   sportProtocol.inputData(d);
         }
       
         print("接收数据xxx:\d\n${buffer.toString()}");
@@ -84,6 +90,7 @@ class SerialDevice with ChangeNotifier {
     //String hexString = data.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
     print('receivedHex: ${hexString.toUpperCase()}'); // 转换为16进制
     list.add(hexString);
+    sportProtocol.inputData(Uint8List.fromList(data));
     timeout = DateTime.now().millisecondsSinceEpoch;
   });
   //执行接下来的操作

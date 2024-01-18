@@ -58,6 +58,7 @@ class FivePage extends StatelessWidget {
       alignment: Alignment.topLeft,
       width: 800,
       height:400,
+      
       decoration: BoxDecoration( 
         
             border: Border.all( 
@@ -68,14 +69,19 @@ class FivePage extends StatelessWidget {
             
             ),
             
-      child: Text( 
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child:Text( 
          Store.value1<SerialDevice>(context).data,
     
-         maxLines: 10,
+         maxLines: 100,
+         softWrap: true,
+
          style: TextStyle(
              color:Colors.red,
              
          ),
+      ),
       ),
     );
   }
