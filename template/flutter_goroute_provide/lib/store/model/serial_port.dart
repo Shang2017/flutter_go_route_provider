@@ -86,7 +86,7 @@ class SerialDevice with ChangeNotifier {
   });
   reader.stream.listen((data) {
     print('received: $data');
-    print('receivedString: ${utf8.decode(data)}'); // 转换为字符串
+  ///0x0 convert to error  print('receivedString: ${utf8.decode(data)}'); // 转换为字符串
     String hexString = data.map((byte) => byte.toRadixString(16)).join();
     //String hexString = data.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
     print('receivedHex: ${hexString.toUpperCase()}'); // 转换为16进制
