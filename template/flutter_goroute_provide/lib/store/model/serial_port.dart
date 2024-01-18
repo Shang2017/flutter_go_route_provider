@@ -24,6 +24,7 @@ class SerialDevice with ChangeNotifier {
 
 
   String get data => qbuffer.join('\n').toString();
+  List get data1 => qbuffer.toList();
   get ports => portslist;
 
   SerialDevice();

@@ -16,9 +16,9 @@ class FivePage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             comSelect(context),
-            multiTextDisplay(context),
+            //multiTextDisplay(context),
             //multTextField(context,edController,focus),
-         
+            listViewDisplay(context),
       
       
           ],
@@ -71,9 +71,10 @@ class FivePage extends StatelessWidget {
             
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
+      
         child:Text( 
          Store.value1<SerialDevice>(context).data,
-    
+        
          maxLines: 100,
          softWrap: true,
 
@@ -84,6 +85,40 @@ class FivePage extends StatelessWidget {
       ),
       ),
     );
+  }
+
+
+   Widget listViewDisplay(context) {
+    return Container( 
+      alignment: Alignment.topLeft,
+      width: 800,
+      height:400,
+      
+      decoration: BoxDecoration( 
+        
+            border: Border.all( 
+             
+                color: Colors.red,
+                width: 1,
+              ),
+            
+            ),
+            
+      child: Builder(
+
+            builder:(BuildContext context) {
+              int count = Store.value1<SerialDevice>(context).data1.length-1;
+              return ListView.builder(
+               
+                 itemCount: Store.value1<SerialDevice>(context).data1.length,
+                 itemBuilder: (context, index) => Text(Store.value1<SerialDevice>(context).data1[count-index].toString()),
+        
+              );
+            },
+      ),
+          
+      );
+   
   }
 
   Widget multTextField(context,contr,foc) {
@@ -101,6 +136,7 @@ class FivePage extends StatelessWidget {
        ),
       
       child: TextField( 
+      
       controller: contr,
       focusNode: foc,
       maxLines: 3,
