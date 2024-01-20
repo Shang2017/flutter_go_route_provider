@@ -10,6 +10,7 @@ import '../views/settings_page.dart';
 import '../views/three_page.dart';
 import '../views/four_page.dart';
 import '../views/five_page.dart';
+import '../views/six_page.dart';
 
 
 
@@ -34,6 +35,7 @@ class DetailRoutes {
   static const String thirdPath = '/third';
   static const String fourPath = '/four';
   static const String fivePath = '/five';
+  static const String sixPath = '/six';
 
   // 用于 命名路由的常量
   static const String homeNamed = 'home_page';
@@ -43,6 +45,7 @@ class DetailRoutes {
   static const String thirdNamed = 'third_page';
   static const String fourNamed = 'four_page';
   static const String fiveNamed = 'five_page';
+  static const String sixNamed = 'six_page';
 
    static List<RouteIndex> index = [
     RouteIndex(homePath,homeNamed,
@@ -112,5 +115,12 @@ class DetailRoutes {
             (context){
               GoRouter.of(context).push(DetailRoutes.fivePath);
             },),   
+
+    RouteIndex(sixPath,sixNamed,
+            (context, state) => SixPage(),
+            Icon(Icons.settings_outlined),Text('Six'), 
+            (context){
+              GoRouter.of(context).push(DetailRoutes.sixPath);
+            },),               
   ];
 }

@@ -24,7 +24,13 @@ class DropDownSelectState extends State<DropDownSelect> {
     return Container(
        
     child: Center(
-      child: DropdownButton<String>(
+     
+        child:ConstrainedBox(
+        constraints: BoxConstraints( 
+          minWidth: double.infinity,
+          maxWidth:double.infinity,
+        ),
+        child:DropdownButton<String>(
     //    isExpanded: true,
         value: dropdownValue,
         onChanged: (newValue) {
@@ -42,6 +48,7 @@ class DropDownSelectState extends State<DropDownSelect> {
           );
         }).toList(),
       ),
+        ),
     ),
     );
   }
