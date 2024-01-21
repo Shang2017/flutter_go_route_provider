@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'protocol.dart';
+import '../store/object/sport_package_info.dart';
 
 enum ProtocolState {
   WAITHEAD,
@@ -8,14 +9,6 @@ enum ProtocolState {
   WAITPRIM,
   WAITPACKET,
   WAITCRC,
-}
-
-class PacketInfo{
-  int physicID=0;
-  int prim=0;
-  int appID=0;
-  List<int> packet=[];
-
 }
 
 
@@ -31,7 +24,7 @@ class SportProtocol extends Protocol{
   int crcShort = 0;
   List<int> packet=[];
   List<int> _fullPacket = [];
-  PacketInfo pkt = PacketInfo();
+  SportPacketInfo pkt = SportPacketInfo();
 
  
   

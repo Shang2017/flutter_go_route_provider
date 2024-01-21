@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'dart:collection';
 import '../../device/sport_protcol.dart';
+import '../object/sport_packet_info.dart';
 
 class SerialDevice with ChangeNotifier {
 
@@ -18,6 +19,7 @@ class SerialDevice with ChangeNotifier {
   int sendTimeout = DateTime.now().millisecondsSinceEpoch;
   StringBuffer buffer = StringBuffer();
   ListQueue qbuffer = ListQueue<String>();
+  List<List<int>> sportPackets=[];
  
 
   SportProtocol sportProtocol = SportProtocol();
@@ -92,6 +94,10 @@ class SerialDevice with ChangeNotifier {
     print('receivedHex: ${hexString.toUpperCase()}'); // 转换为16进制
     list.add(hexString);
     sportProtocol.inputData(Uint8List.fromList(data));
+    while(sportProtocol.packet.isNotEmpty) {
+       sportPackets.add(sportProtocol.packets[0]);
+       sportProtocol.packets.removeAt(0);
+    }
     timeout = DateTime.now().millisecondsSinceEpoch;
   });
   //执行接下来的操作
