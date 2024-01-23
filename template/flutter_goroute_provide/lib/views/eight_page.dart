@@ -167,6 +167,10 @@ class _MyField {
   Map<String, int>? options = {};
   Function(List)? getfrompackage;
   Function(List, int)? setPackage;
+  TextEditingController? controller;
+  String? dropDownValue;
+ 
+  void Function(String)? callback;
   int page;
 
   _MyField(this.page, this.name, this.readOnly, this.value,
@@ -189,22 +193,36 @@ class _HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<_HomeContent> {
   _HomeContentState();
+   List<_MyField> mmLayout = [];
+  late List<Widget>  ll = _getData();
+
+   void Function(String)? callback;
+
   @override
   void initState() {
+   
     BlocProvider.of<SerialDevice>(context)
         .first
         .sportPacketStream
         .stream
         .listen((pkt) {
-      print("receive callback1");
-      print(pkt);
+     
+        print(mmLayout[0].value);
+        
+      
+    
+        mmLayout[0].controller?.text  = "hhh";
+        mmLayout[1].callback?.call('t2');
+       
+
+    
+        print(mmLayout[0].value);
     });
     super.initState();
   }
 
   List<Widget> _getData() {
-    List<_MyField> mmLayout = [];
-
+   
     for (Map<String, dynamic> t1 in _userJsonx) {
       for (Map<String, dynamic> t2 in t1['pages']) {
         for (Map<String, dynamic> t3 in t2['params']) {
@@ -216,6 +234,7 @@ class _HomeContentState extends State<_HomeContent> {
     var list = mmLayout.map((obj) {
       if (obj.options == null) {
         TextEditingController _edController = TextEditingController();
+        obj.controller = _edController;
         FocusNode _focusNode = FocusNode();
         _focusNode.addListener(() {
           if (!_focusNode.hasFocus) {
@@ -244,6 +263,17 @@ class _HomeContentState extends State<_HomeContent> {
         );
       } else {
         print(obj.options!.keys.toList());
+        var dropDownValue = obj.dropDownValue??"t1";
+        var dpselect = DropDownSelect(dropDownValue,
+                    obj.options!.keys.toList(), (context, str) {
+                      obj.value = str;
+                      obj.dropDownValue = str;
+                      print(str);
+
+                    },
+                    onUpdate: (onInvoke) => obj.callback = onInvoke);
+       
+    
         l = Container(
           padding: EdgeInsets.all(20),
           height: 100,
@@ -254,12 +284,7 @@ class _HomeContentState extends State<_HomeContent> {
               Expanded(
                   child: Container(
                 padding: EdgeInsets.only(left: 20, right: 20),
-                child: DropDownSelect(obj.options!.keys.toList()[0],
-                    obj.options!.keys.toList(), (context, str) {
-                      obj.value = str;
-                      print(str);
-
-                    }),
+                child: dpselect,
               )),
             ],
           ),
@@ -274,7 +299,7 @@ class _HomeContentState extends State<_HomeContent> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> ll = _getData();
+
     return Column(
       children: [
         eightComSelect(context),

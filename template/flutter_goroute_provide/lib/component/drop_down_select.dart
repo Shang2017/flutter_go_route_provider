@@ -5,7 +5,10 @@ class DropDownSelect extends StatefulWidget {
    List<String> items;
    final Function(BuildContext,String) onOptionSelected;
 
-   DropDownSelect(this.dropdownValue,this.items,this.onOptionSelected);
+    final Function(void Function(String) onInvoke)? onUpdate;
+
+   DropDownSelect(this.dropdownValue,this.items,this.onOptionSelected,{Key? key,this.onUpdate}) :super(key:key);
+
 
    @override
    DropDownSelectState createState() => DropDownSelectState(dropdownValue,items);
@@ -17,7 +20,20 @@ class DropDownSelectState extends State<DropDownSelect> {
 
     String dropdownValue = 'One';
     List<String> items;
-  
+
+   @override 
+   void initState() {
+    widget.onUpdate?.call((str) {
+      print('onUpdate');
+     
+      setState(() {
+
+ dropdownValue = str;
+
+      });
+    });
+    super.initState();
+   }
 
 
     Widget build(BuildContext context) {
@@ -38,7 +54,7 @@ class DropDownSelectState extends State<DropDownSelect> {
            dropdownValue = newValue!;
            widget.onOptionSelected(context,dropdownValue);
           });
-         print(newValue);
+      
         },
         items: items
             .map<DropdownMenuItem<String>>((String value) {
