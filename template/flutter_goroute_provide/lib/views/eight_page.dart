@@ -47,8 +47,8 @@ final _userJsonx = [
             "name": "field4",
             "readOnly": false,
             "value": "14",
-            "options": {"t1": 1, "t2": 2},
-            "get": (x) => x[6] + x[7],
+            "options": {"t1": 1, "t2": 2,"t3":3},
+            "get": (x) => x[8]&0xf,
             "set": (x, a) => x[6] = a,
           }
         ],
@@ -88,7 +88,7 @@ final _userJsonx = [
             "name": "field8",
             "readOnly": false,
             "value": "14",
-            "options": {"t1": 1, "t2": 2},
+            "options": {"t1": 1, "t2": 2,"t3":3},
             "get": (x) => x[7] & 0xf,
             "set": (x, a) => x[6] = a,
           }
@@ -198,6 +198,26 @@ class _HomeContentState extends State<_HomeContent> {
 
    void Function(String)? callback;
 
+   void processPkt(List<int> pkt) {
+       int len = mmLayout.length;
+       for(int i=0;i<len;i++) {
+           if(mmLayout[i].page == pkt[5]) {
+             int r = mmLayout[i].getfrompackage!(pkt);
+             if(mmLayout[i].options == null) {
+                mmLayout[i].controller?.text  = r.toRadixString(16);
+             }
+             else{
+                 
+                 mmLayout[i].options!.forEach((key, value) { 
+                     if(r == value) mmLayout[i].callback?.call(key);
+                 });
+             }
+             
+           }
+       }
+
+   }
+
   @override
   void initState() {
    
@@ -206,17 +226,9 @@ class _HomeContentState extends State<_HomeContent> {
         .sportPacketStream
         .stream
         .listen((pkt) {
-     
-        print(mmLayout[0].value);
-        
-      
-    
-        mmLayout[0].controller?.text  = "hhh";
-        mmLayout[1].callback?.call('t2');
-       
-
-    
-        print(mmLayout[0].value);
+          processPkt(pkt);
+//        mmLayout[0].controller?.text  = "hhh";
+//        mmLayout[1].callback?.call('t2');
     });
     super.initState();
   }
