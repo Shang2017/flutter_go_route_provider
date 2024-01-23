@@ -48,6 +48,7 @@ class SerialDevice extends BlocBase with  ChangeNotifier {
 
   open(String portName)
   {
+     print("serial open");
      name  = portName;
         
      port = SerialPort(portName);   
@@ -62,6 +63,8 @@ class SerialDevice extends BlocBase with  ChangeNotifier {
   @override
   void dispose()
   {
+    print("serial port dispose");
+    port?.close();
     port?.dispose();
     controller.close();
   }

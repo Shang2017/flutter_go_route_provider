@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_6/blocs/bloc_provider.dart';
+import 'package:provider/provider.dart';
 import '../store/index.dart' show Store, SerialDevice;
 import '../component/drop_down_select.dart';
 
@@ -47,8 +48,8 @@ final _userJsonx = [
             "name": "field4",
             "readOnly": false,
             "value": "14",
-            "options": {"t1": 1, "t2": 2,"t3":3},
-            "get": (x) => x[8]&0xf,
+            "options": {"t1": 1, "t2": 2, "t3": 3},
+            "get": (x) => x[8] & 0xf,
             "set": (x, a) => x[6] = a,
           }
         ],
@@ -88,7 +89,7 @@ final _userJsonx = [
             "name": "field8",
             "readOnly": false,
             "value": "14",
-            "options": {"t1": 1, "t2": 2,"t3":3},
+            "options": {"t1": 1, "t2": 2, "t3": 3},
             "get": (x) => x[7] & 0xf,
             "set": (x, a) => x[6] = a,
           }
@@ -169,7 +170,7 @@ class _MyField {
   Function(List, int)? setPackage;
   TextEditingController? controller;
   String? dropDownValue;
- 
+
   void Function(String)? callback;
   int page;
 
@@ -193,48 +194,59 @@ class _HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<_HomeContent> {
   _HomeContentState();
-   List<_MyField> mmLayout = [];
-  late List<Widget>  ll = _getData();
+  List<_MyField> mmLayout = [];
+  late List<Widget> ll;
 
-   void Function(String)? callback;
+  void Function(String)? callback;
 
-   void processPkt(List<int> pkt) {
-       int len = mmLayout.length;
-       for(int i=0;i<len;i++) {
-           if(mmLayout[i].page == pkt[5]) {
-             int r = mmLayout[i].getfrompackage!(pkt);
-             if(mmLayout[i].options == null) {
-                mmLayout[i].controller?.text  = r.toRadixString(16);
-             }
-             else{
-                 
-                 mmLayout[i].options!.forEach((key, value) { 
-                     if(r == value) mmLayout[i].callback?.call(key);
-                 });
-             }
-             
-           }
-       }
-
-   }
+  void processPkt(List<int> pkt) {
+    int len = mmLayout.length;
+    for (int i = 0; i < len; i++) {
+      if (mmLayout[i].page == pkt[5]) {
+        int r = mmLayout[i].getfrompackage!(pkt);
+        if (mmLayout[i].options == null) {
+          mmLayout[i].controller?.text = r.toRadixString(16);
+        } else {
+          mmLayout[i].options!.forEach((key, value) {
+            if (r == value) mmLayout[i].callback?.call(key);
+          });
+        }
+      }
+    }
+  }
 
   @override
   void initState() {
-   
+    ll = _getData();
     BlocProvider.of<SerialDevice>(context)
         .first
         .sportPacketStream
         .stream
         .listen((pkt) {
-          processPkt(pkt);
+      processPkt(pkt);
 //        mmLayout[0].controller?.text  = "hhh";
 //        mmLayout[1].callback?.call('t2');
     });
     super.initState();
+    print("_HomeContentState init");
   }
 
+  @override
+  void dispose() {
+    print("_HomeContentState dispose");
+    mmLayout=[];
+    ll = [];
+    callback = null;
+    
+
+    super.dispose();
+
+  }
+
+  
+
+
   List<Widget> _getData() {
-   
     for (Map<String, dynamic> t1 in _userJsonx) {
       for (Map<String, dynamic> t2 in t1['pages']) {
         for (Map<String, dynamic> t3 in t2['params']) {
@@ -275,17 +287,14 @@ class _HomeContentState extends State<_HomeContent> {
         );
       } else {
         print(obj.options!.keys.toList());
-        var dropDownValue = obj.dropDownValue??"t1";
-        var dpselect = DropDownSelect(dropDownValue,
-                    obj.options!.keys.toList(), (context, str) {
-                      obj.value = str;
-                      obj.dropDownValue = str;
-                      print(str);
+        var dropDownValue = obj.dropDownValue ?? "t1";
+        var dpselect = DropDownSelect(dropDownValue, obj.options!.keys.toList(),
+            (context, str) {
+          obj.value = str;
+          obj.dropDownValue = str;
+          print(str);
+        }, onUpdate: (onInvoke) => obj.callback = onInvoke);
 
-                    },
-                    onUpdate: (onInvoke) => obj.callback = onInvoke);
-       
-    
         l = Container(
           padding: EdgeInsets.all(20),
           height: 100,
@@ -311,7 +320,6 @@ class _HomeContentState extends State<_HomeContent> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         eightComSelect(context),
@@ -325,7 +333,7 @@ class _HomeContentState extends State<_HomeContent> {
           children: ll,
         ),
         Row(children: [
-          ElevatedButton(onPressed: ()=>{}, child: Text("Read")),
+          ElevatedButton(onPressed: () => {}, child: Text("Read")),
           Padding(padding: EdgeInsets.all(40)),
           ElevatedButton(onPressed: () => {}, child: Text("Write")),
         ]),
@@ -388,8 +396,6 @@ class MyCounterState1 extends State<MyCounter1> {
     BlocProvider.of<SerialDevice>(context).first.readData();
   }
 
-
-
   @override
   void initState() {
     BlocProvider.of<SerialDevice>(context)
@@ -404,7 +410,6 @@ class MyCounterState1 extends State<MyCounter1> {
     //Store.value<SerialDevice>(context).setCallback(myCallback);
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {

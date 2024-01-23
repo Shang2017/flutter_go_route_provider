@@ -38,7 +38,11 @@ class BlocProviderState<T extends BlocBase> extends State<BlocProvider<T>> {
 
   @override
   void dispose() {
+    print("blocprovider dispose");
+    print(widget.blocs);
+     widget.blocs.first.dispose();
     widget.blocs.map((bloc){ 
+      print(bloc);
       bloc.dispose();
     });    
     super.dispose();
