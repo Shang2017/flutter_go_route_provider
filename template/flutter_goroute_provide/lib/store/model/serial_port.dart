@@ -6,10 +6,13 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'dart:collection';
 import '../../device/sport_protcol.dart';
 import '../object/sport_packet_info.dart';
+import '../../blocs/bloc_base.dart';
+import 'package:flutter/material.dart';
 
-class SerialDevice with ChangeNotifier {
+class SerialDevice extends BlocBase with  ChangeNotifier {
 
   List<String> portslist = SerialPort.availablePorts;  
+ 
 
   SerialPort? port;
   String? name;
@@ -20,7 +23,12 @@ class SerialDevice with ChangeNotifier {
   StringBuffer buffer = StringBuffer();
   ListQueue qbuffer = ListQueue<String>();
   List<List<int>> sportPackets=[];
- 
+
+
+  final controller = StreamController<List<int>>();
+  get sportPacketSink => controller.sink;
+  get sportPacketStream => controller;
+
 
   SportProtocol sportProtocol = SportProtocol();
 
@@ -31,6 +39,7 @@ class SerialDevice with ChangeNotifier {
 
   SerialDevice();
 
+  
 
   void init()
   {
@@ -54,7 +63,9 @@ class SerialDevice with ChangeNotifier {
   void dispose()
   {
     port?.dispose();
+    controller.close();
   }
+
 
   void readData() async {
   // 读数据
@@ -74,11 +85,10 @@ class SerialDevice with ChangeNotifier {
         for (var d in list) {
           buffer.write(d.toString());
           if(qbuffer.length > 100) qbuffer.removeFirst();
-          qbuffer.add(d.toString());
-       //   sportProtocol.inputData(d);
+          qbuffer.add(d.toString());       
         }
       
-        print("接收数据xxx:\d\n${buffer.toString()}");
+        print("接收数据:\d\n${buffer.toString()}");
         notifyListeners();
         buffer.clear();
         list.clear();
@@ -93,10 +103,18 @@ class SerialDevice with ChangeNotifier {
     //String hexString = data.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
     print('receivedHex: ${hexString.toUpperCase()}'); // 转换为16进制
     list.add(hexString);
-    sportProtocol.inputData(Uint8List.fromList(data));
-    while(sportProtocol.packet.isNotEmpty) {
-       sportPackets.add(sportProtocol.packets[0]);
+    sportProtocol.inputData(Uint8List.fromList(data),(pkt) {
+      print("callback");
+       controller.sink.add(pkt);
+    });
+
+ 
+    while(sportProtocol.packets.isNotEmpty) {
+       print("receive package");
+
        sportProtocol.packets.removeAt(0);
+      
+
     }
     timeout = DateTime.now().millisecondsSinceEpoch;
   });

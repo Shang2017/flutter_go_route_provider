@@ -308,12 +308,13 @@ class MyCounterState extends State<MyCounter> {
   @override
   void initState() {
     
-    bloc.counter.listen((_count) {
+    bloc.counterStream.listen((_count) {
       setState(() {
         _counter = _count;
       });
 
     });
+    bloc.readData();
     super.initState();
   }
 

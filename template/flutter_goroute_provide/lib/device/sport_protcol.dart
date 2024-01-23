@@ -72,7 +72,7 @@ class SportProtocol extends Protocol{
   }
 
   @override
-  bool inputData(Uint8List data)
+  bool inputData(Uint8List data,Function(List<int>) callback)
   {
     while(data.isNotEmpty)
     {
@@ -110,8 +110,12 @@ class SportProtocol extends Protocol{
                }
                data = data.sublist(1);
                if(_fullPacket.length == 10) {
+                  print("length = 10");
+                  
                   inputState = ProtocolState.WAITHEAD;
                   packets.add(_fullPacket);
+                  callback(_fullPacket);
+                                
                }
            }           
            break;
