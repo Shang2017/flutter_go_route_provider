@@ -18,4 +18,6 @@ Usage:
 3. new page in viewa directory
 4. route/detail.dart to drive route
 
+5. add test； flutter pu add dev:test
+flutter test --plain-name "Test start, increment, decrement"
 
